@@ -1,6 +1,6 @@
 Color Display Adapter
 =====================
-Version 0.4 (WIP) 
+Version 0.4a (WIP) 
 
 Color Display Adapter (CDA) device that allows to display text modes and graphics modes in color, using a 16 programmable color palette.
 
@@ -22,19 +22,15 @@ rate of 21.8 KHz.
 RESOURCES
 ---------
 
-A basic CDA card exposes 9600 Bytes of Video RAM, plus have a configuration *Jumper*, and can generate a interrupt for Vsync events.
+A basic CDA card exposes 9600 Bytes of Video RAM, and can generate a interrupt for Vsync events. The address of the block and interrupt message are gave by Hardware Enumerator.
 
-- Interrupt Message = in function of *Jumper* value, will be :
-    - 0 -> 0x0000005A
-    - 1 -> 0x0000015A
-    - 2- > 0x0000025A
-    - 3 -> 0x0000035A
+- Address block of 10KiB
+- Interrupt VSync
 
-### Preferred Address Block
-The CDA Display try to use this address blocks:
+The hardware enumerator will reserver a block of 10KiB, were are placed:
 
-- Address 0x1A0000-0x1A2580: Video RAM
-- Address 0x11C000 (Read/Write byte): SETUP registers
+- SETUP register (Read/write word) at of the begin of the block (offset 0)
+- At least 9600 Bytes of Video RAM begin at offset 0x10
 
 
 OPERATION
@@ -50,7 +46,7 @@ Interrupt. SETUP register format :
 - BIT 5 : If the CDA is in text mode, enables the use of the RAM user font.
 - BIT 6 : Enables the use of the RAM user color palette.
 - BIT 7 : Enables V-Sync refresh interrupt. Does a interrupt every time that the
-  screen is refreshed at a rate of 25Hz.
+  screen is refreshed (ideally at a rate of 25Hz).
 
 ### Video modes
 Bits 3 to 0 of SETUP register :

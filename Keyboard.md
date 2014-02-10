@@ -1,6 +1,6 @@
 Generic Keyboard controller
 ================
-Version 0.5 (WIP) 
+Version 0.5a (WIP) 
 
 Generic Keyboard controller. Handles an internal buffer to store key events.
 
@@ -13,18 +13,15 @@ Generic Keyboard controller. Handles an internal buffer to store key events.
 RESOURCES
 ---------
 
-The keyboard controller uses few registers to see the status of the keyboard, the key buffer and send commands. Also, have a configuration *Jumper*.
+The keyboard controller uses few registers to see the status of the keyboard, the key buffer and send commands, plus can throw a interrupt. The address of the registers and interrupt message are gave by Hardware Enumerator.
 
-- Event interrupt message = in function of *Jumper* value, will be :
-    - 1 -> 0x00000109
-    - 2- > 0x00000209
-    - 3 -> 0x00000309
+- Address block of 3 bytes
+- Interrupt KeyEvent
 
-### Preferred Address Block
-The keyboard controller try to use this address blocks:
+In the address block are this registers :
 
-- Address 0x110160 (Read/Write word): KEY_REG
-- Address 0x110162 (Read/Write byte): KEY_CMD
+- KEY_REG (Read/Write a word) at offset 0
+- KEY_CMD (Read/Write a byte) at offset 2
 
 HOW WORKS
 ---------
@@ -167,12 +164,12 @@ The buffer operates in FIFO fashion. So when a user types a key, a new event is 
 - KEY_X   88
 - KEY_Y   89
 - KEY_Z   90
-- KEY_LEFT_BRACKET   91  /* [ */
-- KEY_BACKSLASH      92  /* \ */
-- KEY_RIGHT_BRACKET  93  /* ] */
-- KEY_GRAVE_ACCENT   96  /* ` */
-- KEY_WORLD_1        161 /* non-US #1 */
-- KEY_WORLD_2        162 /* non-US #2 */
+- KEY_LEFT_BRACKET   91  -> [
+- KEY_BACKSLASH      92  -> \
+- KEY_RIGHT_BRACKET  93  -> ]
+- KEY_GRAVE_ACCENT   96  -> `
+- KEY_WORLD_1        161 -> non-US #1
+- KEY_WORLD_2        162 -> non-US #2
 - KEY_ESCAPE         256
 - KEY_ENTER          257
 - KEY_TAB            258
@@ -221,9 +218,9 @@ Key codes are:
 Integrated Keyboard controller in the motherboard
 =================================================
 
-The integrated keyboard controller in the motherboard is not listed in the hardware enumerator and not hate a *Jumper*. Uses this resources :
+The integrated keyboard controller in the motherboard is not listed in the hardware enumerator. Uses this resources :
 
-- Event interrupt message = 0x00000009
+- Interrupt KeyEvent message = 0x00000009
 - Address 0x110060 (Read/Write word): KEY_REG
 - Address 0x110062 (Read/Write byte): KEY_CMD
 
